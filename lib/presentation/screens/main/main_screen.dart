@@ -5,6 +5,7 @@ import '../../../core/theme/app_colors.dart';
 import '../home/home_screen.dart';
 import '../shops/shops_screen.dart';
 import '../saved/saved_screen.dart';
+import '../chat/chat_screen.dart';
 import '../profile/profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -21,6 +22,7 @@ class _MainScreenState extends State<MainScreen> {
     HomeScreen(),
     ShopsScreen(),
     SavedScreen(),
+    ChatScreen(),
     ProfileScreen(),
   ];
 
@@ -110,6 +112,27 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
               label: 'Saqlangan',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                'assets/icons/svg/chat.svg',
+                width: 24.w,
+                height: 24.h,
+                colorFilter: ColorFilter.mode(
+                  AppColors.textSecondary,
+                  BlendMode.srcIn,
+                ),
+              ),
+              activeIcon: SvgPicture.asset(
+                'assets/icons/svg/chat.svg',
+                width: 24.w,
+                height: 24.h,
+                colorFilter: ColorFilter.mode(
+                  AppColors.primary,
+                  BlendMode.srcIn,
+                ),
+              ),
+              label: 'Chat',
             ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
