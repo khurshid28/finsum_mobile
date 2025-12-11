@@ -126,21 +126,30 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
   }
 
   Widget _buildHistoryItem(Map<String, dynamic> item) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+    return GestureDetector(
+      onTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${item['shopName']} - ${item['subject']} chati ochildi'),
+            duration: const Duration(seconds: 2),
           ),
-        ],
-      ),
-      child: Column(
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 12.h),
+        padding: EdgeInsets.all(16.w),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
@@ -221,6 +230,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
             ],
           ),
         ],
+        ),
       ),
     );
   }

@@ -51,111 +51,48 @@ class _MainScreenState extends State<MainScreen> {
           unselectedFontSize: 12.sp,
           items: [
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/icons/svg/home.svg',
-                width: 24.w,
-                height: 24.h,
-                colorFilter: ColorFilter.mode(
-                  AppColors.textSecondary,
-                  BlendMode.srcIn,
-                ),
-              ),
-              activeIcon: SvgPicture.asset(
-                'assets/icons/svg/home.svg',
-                width: 24.w,
-                height: 24.h,
-                colorFilter: ColorFilter.mode(
-                  AppColors.primary,
-                  BlendMode.srcIn,
-                ),
-              ),
+              icon: _buildNavIcon('assets/icons/svg/home.svg', false),
+              activeIcon: _buildNavIcon('assets/icons/svg/home.svg', true),
               label: 'Asosiy',
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/icons/svg/shop.svg',
-                width: 24.w,
-                height: 24.h,
-                colorFilter: ColorFilter.mode(
-                  AppColors.textSecondary,
-                  BlendMode.srcIn,
-                ),
-              ),
-              activeIcon: SvgPicture.asset(
-                'assets/icons/svg/shop.svg',
-                width: 24.w,
-                height: 24.h,
-                colorFilter: ColorFilter.mode(
-                  AppColors.primary,
-                  BlendMode.srcIn,
-                ),
-              ),
+              icon: _buildNavIcon('assets/icons/svg/shop.svg', false),
+              activeIcon: _buildNavIcon('assets/icons/svg/shop.svg', true),
               label: 'Do\'konlar',
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/icons/svg/bookmark.svg',
-                width: 24.w,
-                height: 24.h,
-                colorFilter: ColorFilter.mode(
-                  AppColors.textSecondary,
-                  BlendMode.srcIn,
-                ),
-              ),
-              activeIcon: SvgPicture.asset(
-                'assets/icons/svg/bookmark.svg',
-                width: 24.w,
-                height: 24.h,
-                colorFilter: ColorFilter.mode(
-                  AppColors.primary,
-                  BlendMode.srcIn,
-                ),
-              ),
+              icon: _buildNavIcon('assets/icons/svg/bookmark.svg', false),
+              activeIcon: _buildNavIcon('assets/icons/svg/bookmark.svg', true),
               label: 'Saqlangan',
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/icons/svg/chat.svg',
-                width: 24.w,
-                height: 24.h,
-                colorFilter: ColorFilter.mode(
-                  AppColors.textSecondary,
-                  BlendMode.srcIn,
-                ),
-              ),
-              activeIcon: SvgPicture.asset(
-                'assets/icons/svg/chat.svg',
-                width: 24.w,
-                height: 24.h,
-                colorFilter: ColorFilter.mode(
-                  AppColors.primary,
-                  BlendMode.srcIn,
-                ),
-              ),
+              icon: _buildNavIcon('assets/icons/svg/chat.svg', false),
+              activeIcon: _buildNavIcon('assets/icons/svg/chat.svg', true),
               label: 'Chat',
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/icons/svg/user.svg',
-                width: 24.w,
-                height: 24.h,
-                colorFilter: ColorFilter.mode(
-                  AppColors.textSecondary,
-                  BlendMode.srcIn,
-                ),
-              ),
-              activeIcon: SvgPicture.asset(
-                'assets/icons/svg/user.svg',
-                width: 24.w,
-                height: 24.h,
-                colorFilter: ColorFilter.mode(
-                  AppColors.primary,
-                  BlendMode.srcIn,
-                ),
-              ),
+              icon: _buildNavIcon('assets/icons/svg/user.svg', false),
+              activeIcon: _buildNavIcon('assets/icons/svg/user.svg', true),
               label: 'Profil',
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavIcon(String iconPath, bool isActive) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      padding: EdgeInsets.all(isActive ? 0 : 0),
+      child: SvgPicture.asset(
+        iconPath,
+        width: isActive ? 26.w : 24.w,
+        height: isActive ? 26.h : 24.h,
+        colorFilter: ColorFilter.mode(
+          isActive ? AppColors.primary : AppColors.textSecondary,
+          BlendMode.srcIn,
         ),
       ),
     );
