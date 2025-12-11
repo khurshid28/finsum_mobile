@@ -5,6 +5,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
 import 'chat_history_screen.dart';
+import 'chat_detail_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -261,7 +262,12 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
         onTap: () {
-          // Open chat detail
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ChatDetailScreen(chat: chat),
+            ),
+          );
         },
       ),
     );
