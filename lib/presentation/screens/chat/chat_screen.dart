@@ -5,7 +5,6 @@ import 'package:animate_do/animate_do.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
 import 'chat_history_screen.dart';
-import 'chat_detail_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -17,36 +16,38 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  final List<Map<String, dynamic>> _messages = [];
 
-  final List<Map<String, dynamic>> _chats = [
-    {
-      'id': '1',
-      'name': 'Qo\'llab-quvvatlash',
-      'lastMessage': 'Sizga qanday yordam bera olamiz?',
-      'time': DateTime.now().subtract(const Duration(minutes: 5)),
-      'unreadCount': 2,
-      'isOnline': true,
-      'avatar': 'S',
-    },
-    {
-      'id': '2',
-      'name': 'Artel',
-      'lastMessage': 'Mahsulotingiz haqida savol',
-      'time': DateTime.now().subtract(const Duration(hours: 1)),
-      'unreadCount': 0,
-      'isOnline': true,
-      'avatar': 'A',
-    },
-    {
-      'id': '3',
-      'name': 'Samsung',
-      'lastMessage': 'Rahmat, juda yaxshi xizmat',
-      'time': DateTime.now().subtract(const Duration(hours: 3)),
-      'unreadCount': 0,
-      'isOnline': false,
-      'avatar': 'S',
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _loadInitialMessages();
+  }
+
+  void _loadInitialMessages() {
+    setState(() {
+      _messages.addAll([
+        {
+          'id': '1',
+          'text': 'Assalomu alaykum! Qo\'llab-quvvatlash xizmatiga xush kelibsiz!',
+          'isMine': false,
+          'time': DateTime.now().subtract(const Duration(seconds: 5)),
+        },
+        {
+          'id': '2',
+          'text': 'Sizga qanday yordam bera olamiz?',
+          'isMine': false,
+          'time': DateTime.now().subtract(const Duration(seconds: 3)),
+        },
+      ]);
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -55,19 +56,64 @@ class _ChatScreenState extends State<ChatScreen> {
     super.dispose();
   }
 
-  String _formatTime(DateTime time) {
-    final now = DateTime.now();
-    final difference = now.difference(time);
+  void _sendMessage() {
+    if (_messageController.text.trim().isEmpty) return;
 
-    if (difference.inDays == 0) {
-      return DateFormat('HH:mm').format(time);
-    } else if (difference.inDays == 1) {
-      return 'Kecha';
-    } else if (difference.inDays < 7) {
-      return DateFormat('EEEE', 'uz_UZ').format(time);
-    } else {
-      return DateFormat('dd.MM.yyyy').format(time);
-    }
+    final messageText = _messageController.text.trim();
+    
+    setState(() {
+      _messages.add({
+        'id': DateTime.now().millisecondsSinceEpoch.toString(),
+        'text': messageText,
+        'isMine': true,
+        'time': DateTime.now(),
+      });
+    });
+
+    _messageController.clear();
+
+    // Scroll to bottom
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+
+    // Simulate support response
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          _messages.add({
+            'id': DateTime.now().millisecondsSinceEpoch.toString(),
+            'text': 'Rahmat! Mutaxassislarimiz tez orada javob berishadi.',
+            'isMine': false,
+            'time': DateTime.now(),
+          });
+        });
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_scrollController.hasClients) {
+            _scrollController.animateTo(
+              _scrollController.position.maxScrollExtent,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+            );
+          }
+        });
+      }
+    });
+  }
+
+  String _formatTime(DateTime time) {
+    return DateFormat('HH:mm').format(time);
+  }
+
+  List<Map<String, dynamic>> get _myMessages {
+    return _messages.where((msg) => msg['isMine'] == true).toList();
   }
 
   @override
@@ -75,8 +121,48 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Chat'),
-        centerTitle: true,
+        title: Row(
+          children: [
+            Container(
+              width: 35.w,
+              height: 35.h,
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.support_agent,
+                  color: AppColors.primary,
+                  size: 20.sp,
+                ),
+              ),
+            ),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Qo\'llab-quvvatlash',
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  Text(
+                    'Onlayn',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: AppColors.success,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
@@ -93,46 +179,97 @@ class _ChatScreenState extends State<ChatScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => const ChatHistoryScreen(),
+                  builder: (_) => ChatHistoryScreen(myMessages: _myMessages),
                 ),
               );
             },
           ),
         ],
       ),
-      body: _chats.isEmpty ? _buildEmptyState() : _buildChatList(),
-    );
-  }
-
-  Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      body: Column(
         children: [
-          SvgPicture.asset(
-            'assets/icons/svg/chat.svg',
-            width: 100.w,
-            height: 100.h,
-            colorFilter: ColorFilter.mode(
-              AppColors.textSecondary.withOpacity(0.5),
-              BlendMode.srcIn,
-            ),
+          // Messages List
+          Expanded(
+            child: _messages.isEmpty
+                ? Center(
+                    child: Text(
+                      'Xabar yuboring',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  )
+                : ListView.builder(
+                    controller: _scrollController,
+                    padding: EdgeInsets.all(16.w),
+                    itemCount: _messages.length,
+                    itemBuilder: (context, index) {
+                      return FadeInUp(
+                        delay: Duration(milliseconds: index * 50),
+                        child: _buildMessage(_messages[index]),
+                      );
+                    },
+                  ),
           ),
-          SizedBox(height: 24.h),
-          Text(
-            'Hali chat yo\'q',
-            style: TextStyle(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textSecondary,
+
+          // Message Input
+          Container(
+            padding: EdgeInsets.all(16.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, -2),
+                ),
+              ],
             ),
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            'Yangi chat boshlang',
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: AppColors.textSecondary,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.background,
+                      borderRadius: BorderRadius.circular(25.r),
+                    ),
+                    child: TextField(
+                      controller: _messageController,
+                      decoration: InputDecoration(
+                        hintText: 'Savolingizni yozing...',
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 20.w,
+                          vertical: 12.h,
+                        ),
+                      ),
+                      maxLines: null,
+                      textInputAction: TextInputAction.send,
+                      onSubmitted: (_) => _sendMessage(),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                GestureDetector(
+                  onTap: _sendMessage,
+                  child: Container(
+                    width: 48.w,
+                    height: 48.h,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.send,
+                        color: Colors.white,
+                        size: 22.sp,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -140,135 +277,79 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget _buildChatList() {
-    return ListView.builder(
-      padding: EdgeInsets.all(16.w),
-      itemCount: _chats.length,
-      itemBuilder: (context, index) {
-        return FadeInUp(
-          delay: Duration(milliseconds: index * 100),
-          child: _buildChatItem(_chats[index]),
-        );
-      },
-    );
-  }
+  Widget _buildMessage(Map<String, dynamic> message) {
+    final isMine = message['isMine'];
 
-  Widget _buildChatItem(Map<String, dynamic> chat) {
-    final hasUnread = chat['unreadCount'] > 0;
-    final isOnline = chat['isOnline'];
-
-    return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: ListTile(
-        contentPadding: EdgeInsets.all(12.w),
-        leading: Stack(
-          children: [
+    return Padding(
+      padding: EdgeInsets.only(bottom: 12.h),
+      child: Row(
+        mainAxisAlignment:
+            isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          if (!isMine) ...[
             Container(
-              width: 50.w,
-              height: 50.h,
+              width: 30.w,
+              height: 30.h,
               decoration: BoxDecoration(
                 color: AppColors.primary.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
               child: Center(
-                child: Text(
-                  chat['avatar'],
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primary,
-                  ),
+                child: Icon(
+                  Icons.support_agent,
+                  color: AppColors.primary,
+                  size: 16.sp,
                 ),
               ),
             ),
-            if (isOnline)
-              Positioned(
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  width: 12.w,
-                  height: 12.h,
-                  decoration: BoxDecoration(
-                    color: AppColors.success,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 2,
+            SizedBox(width: 8.w),
+          ],
+          Flexible(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+              decoration: BoxDecoration(
+                color: isMine ? AppColors.primary : Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16.r),
+                  topRight: Radius.circular(16.r),
+                  bottomLeft: Radius.circular(isMine ? 16.r : 4.r),
+                  bottomRight: Radius.circular(isMine ? 4.r : 16.r),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 5,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    message['text'],
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      color: isMine ? Colors.white : AppColors.textPrimary,
                     ),
                   ),
-                ),
-              ),
-          ],
-        ),
-        title: Text(
-          chat['name'],
-          style: TextStyle(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
-          ),
-        ),
-        subtitle: Text(
-          chat['lastMessage'],
-          style: TextStyle(
-            fontSize: 14.sp,
-            color: hasUnread ? AppColors.textPrimary : AppColors.textSecondary,
-            fontWeight: hasUnread ? FontWeight.w500 : FontWeight.w400,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        trailing: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              _formatTime(chat['time']),
-              style: TextStyle(
-                fontSize: 12.sp,
-                color: hasUnread ? AppColors.primary : AppColors.textSecondary,
-                fontWeight: hasUnread ? FontWeight.w600 : FontWeight.w400,
-              ),
-            ),
-            if (hasUnread) ...[
-              SizedBox(height: 4.h),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
-                ),
-                child: Text(
-                  chat['unreadCount'].toString(),
-                  style: TextStyle(
-                    fontSize: 10.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                  SizedBox(height: 4.h),
+                  Text(
+                    _formatTime(message['time']),
+                    style: TextStyle(
+                      fontSize: 11.sp,
+                      color: isMine
+                          ? Colors.white.withOpacity(0.7)
+                          : AppColors.textSecondary,
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ],
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => ChatDetailScreen(chat: chat),
             ),
-          );
-        },
+          ),
+          if (isMine) SizedBox(width: 8.w),
+        ],
       ),
     );
   }

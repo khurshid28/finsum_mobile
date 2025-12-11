@@ -5,51 +5,22 @@ import 'package:animate_do/animate_do.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
 
-class ChatHistoryScreen extends StatefulWidget {
-  const ChatHistoryScreen({super.key});
+class ChatHistoryScreen extends StatelessWidget {
+  final List<Map<String, dynamic>> myMessages;
 
-  @override
-  State<ChatHistoryScreen> createState() => _ChatHistoryScreenState();
-}
-
-class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
-  final List<Map<String, dynamic>> _history = [
-    {
-      'id': '1',
-      'shopName': 'Artel',
-      'subject': 'Mahsulot haqida savol',
-      'date': DateTime.now().subtract(const Duration(days: 1)),
-      'messageCount': 12,
-      'status': 'closed',
-    },
-    {
-      'id': '2',
-      'shopName': 'Samsung',
-      'subject': 'To\'lov muammosi',
-      'date': DateTime.now().subtract(const Duration(days: 3)),
-      'messageCount': 8,
-      'status': 'closed',
-    },
-    {
-      'id': '3',
-      'shopName': 'Qo\'llab-quvvatlash',
-      'subject': 'Texnik yordam',
-      'date': DateTime.now().subtract(const Duration(days: 7)),
-      'messageCount': 15,
-      'status': 'closed',
-    },
-    {
-      'id': '4',
-      'shopName': 'Artel',
-      'subject': 'Yetkazib berish',
-      'date': DateTime.now().subtract(const Duration(days: 14)),
-      'messageCount': 6,
-      'status': 'closed',
-    },
-  ];
+  const ChatHistoryScreen({super.key, required this.myMessages});
 
   String _formatDate(DateTime date) {
-    return DateFormat('dd.MM.yyyy').format(date);
+    final now = DateTime.now();
+    final difference = now.difference(date);
+
+    if (difference.inDays == 0) {
+      return 'Bugun ${DateFormat('HH:mm').format(date)}';
+    } else if (difference.inDays == 1) {
+      return 'Kecha ${DateFormat('HH:mm').format(date)}';
+    } else {
+      return DateFormat('dd.MM.yyyy HH:mm').format(date);
+    }
   }
 
   @override
@@ -57,7 +28,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Chat Tarixi'),
+        title: const Text('Mening Savollarim'),
         centerTitle: true,
         leading: IconButton(
           icon: SvgPicture.asset(
@@ -72,7 +43,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: _history.isEmpty ? _buildEmptyState() : _buildHistoryList(),
+      body: myMessages.isEmpty ? _buildEmptyState() : _buildHistoryList(),
     );
   }
 
@@ -92,7 +63,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
           ),
           SizedBox(height: 24.h),
           Text(
-            'Tarix bo\'sh',
+            'Hali savol yo\'q',
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.w600,
@@ -101,7 +72,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
           ),
           SizedBox(height: 8.h),
           Text(
-            'Hali hech qanday chat tarixi yo\'q',
+            'Qo\'llab-quvvatlashga savol yuboring',
             style: TextStyle(
               fontSize: 14.sp,
               color: AppColors.textSecondary,
@@ -115,83 +86,52 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
   Widget _buildHistoryList() {
     return ListView.builder(
       padding: EdgeInsets.all(16.w),
-      itemCount: _history.length,
+      itemCount: myMessages.length,
       itemBuilder: (context, index) {
         return FadeInUp(
           delay: Duration(milliseconds: index * 100),
-          child: _buildHistoryItem(_history[index]),
+          child: _buildHistoryItem(myMessages[index], index + 1),
         );
       },
     );
   }
 
-  Widget _buildHistoryItem(Map<String, dynamic> item) {
-    return GestureDetector(
-      onTap: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${item['shopName']} - ${item['subject']} chati ochildi'),
-            duration: const Duration(seconds: 2),
+  Widget _buildHistoryItem(Map<String, dynamic> message, int number) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 12.h),
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
           ),
-        );
-      },
-      child: Container(
-        margin: EdgeInsets.only(bottom: 12.h),
-        padding: EdgeInsets.all(16.w),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16.r),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
+        ],
+      ),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Expanded(
-                child: Text(
-                  item['shopName'],
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-              ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                 decoration: BoxDecoration(
-                  color: AppColors.textSecondary.withOpacity(0.1),
+                  color: AppColors.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Text(
-                  'Yopilgan',
+                  '#$number',
                   style: TextStyle(
-                    fontSize: 11.sp,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textSecondary,
+                    color: AppColors.primary,
                   ),
                 ),
               ),
-            ],
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            item['subject'],
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          SizedBox(height: 12.h),
-          Row(
-            children: [
+              const Spacer(),
               SvgPicture.asset(
                 'assets/icons/svg/clock.svg',
                 width: 14.w,
@@ -203,25 +143,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
               ),
               SizedBox(width: 4.w),
               Text(
-                _formatDate(item['date']),
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  color: AppColors.textSecondary,
-                ),
-              ),
-              SizedBox(width: 16.w),
-              SvgPicture.asset(
-                'assets/icons/svg/chat.svg',
-                width: 14.w,
-                height: 14.h,
-                colorFilter: ColorFilter.mode(
-                  AppColors.textSecondary,
-                  BlendMode.srcIn,
-                ),
-              ),
-              SizedBox(width: 4.w),
-              Text(
-                '${item['messageCount']} ta xabar',
+                _formatDate(message['time']),
                 style: TextStyle(
                   fontSize: 12.sp,
                   color: AppColors.textSecondary,
@@ -229,8 +151,16 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> {
               ),
             ],
           ),
+          SizedBox(height: 12.h),
+          Text(
+            message['text'],
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: AppColors.textPrimary,
+              height: 1.5,
+            ),
+          ),
         ],
-        ),
       ),
     );
   }
