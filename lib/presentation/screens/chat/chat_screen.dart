@@ -121,20 +121,50 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                AppColors.primary,
+                AppColors.primary.withOpacity(0.8),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         title: Row(
           children: [
             Container(
-              width: 35.w,
-              height: 35.h,
+              width: 42.w,
+              height: 42.h,
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.white.withOpacity(0.3),
+                    Colors.white.withOpacity(0.1),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
                 shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.3),
+                  width: 2,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
               child: Center(
                 child: Icon(
-                  Icons.support_agent,
-                  color: AppColors.primary,
-                  size: 20.sp,
+                  Icons.headset_mic_rounded,
+                  color: Colors.white,
+                  size: 24.sp,
                 ),
               ),
             ),
@@ -146,17 +176,39 @@ class _ChatScreenState extends State<ChatScreen> {
                   Text(
                     'Qo\'llab-quvvatlash',
                     style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                      letterSpacing: 0.3,
                     ),
                   ),
-                  Text(
-                    'Onlayn',
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: AppColors.success,
-                    ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 8.w,
+                        height: 8.h,
+                        decoration: BoxDecoration(
+                          color: Colors.greenAccent,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.greenAccent.withOpacity(0.5),
+                              blurRadius: 4,
+                              spreadRadius: 1,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 6.w),
+                      Text(
+                        'Onlayn',
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          color: Colors.white.withOpacity(0.9),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -164,25 +216,33 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
         automaticallyImplyLeading: false,
+        elevation: 0,
         actions: [
-          IconButton(
-            icon: SvgPicture.asset(
-              'assets/icons/svg/history.svg',
-              width: 24.w,
-              height: 24.h,
-              colorFilter: ColorFilter.mode(
-                AppColors.textPrimary,
-                BlendMode.srcIn,
-              ),
+          Container(
+            margin: EdgeInsets.only(right: 8.w),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(12.r),
             ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => ChatHistoryScreen(myMessages: _myMessages),
+            child: IconButton(
+              icon: SvgPicture.asset(
+                'assets/icons/svg/history.svg',
+                width: 22.w,
+                height: 22.h,
+                colorFilter: const ColorFilter.mode(
+                  Colors.white,
+                  BlendMode.srcIn,
                 ),
-              );
-            },
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ChatHistoryScreen(myMessages: _myMessages),
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -254,15 +314,29 @@ class _ChatScreenState extends State<ChatScreen> {
                 GestureDetector(
                   onTap: _sendMessage,
                   child: Container(
-                    width: 48.w,
-                    height: 48.h,
+                    width: 50.w,
+                    height: 50.h,
                     decoration: BoxDecoration(
-                      color: AppColors.primary,
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.primary,
+                          AppColors.primary.withOpacity(0.8),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                       shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withOpacity(0.4),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
                     child: Center(
                       child: Icon(
-                        Icons.send,
+                        Icons.send_rounded,
                         color: Colors.white,
                         size: 22.sp,
                       ),
@@ -289,17 +363,31 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           if (!isMine) ...[
             Container(
-              width: 30.w,
-              height: 30.h,
+              width: 32.w,
+              height: 32.h,
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.primary,
+                    AppColors.primary.withOpacity(0.7),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
                 shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: Center(
                 child: Icon(
-                  Icons.support_agent,
-                  color: AppColors.primary,
-                  size: 16.sp,
+                  Icons.headset_mic_rounded,
+                  color: Colors.white,
+                  size: 18.sp,
                 ),
               ),
             ),
@@ -307,20 +395,32 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
           Flexible(
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
               decoration: BoxDecoration(
-                color: isMine ? AppColors.primary : Colors.white,
+                gradient: isMine
+                    ? LinearGradient(
+                        colors: [
+                          AppColors.primary,
+                          AppColors.primary.withOpacity(0.85),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      )
+                    : null,
+                color: isMine ? null : Colors.white,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16.r),
-                  topRight: Radius.circular(16.r),
-                  bottomLeft: Radius.circular(isMine ? 16.r : 4.r),
-                  bottomRight: Radius.circular(isMine ? 4.r : 16.r),
+                  topLeft: Radius.circular(18.r),
+                  topRight: Radius.circular(18.r),
+                  bottomLeft: Radius.circular(isMine ? 18.r : 4.r),
+                  bottomRight: Radius.circular(isMine ? 4.r : 18.r),
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 5,
-                    offset: const Offset(0, 2),
+                    color: isMine
+                        ? AppColors.primary.withOpacity(0.2)
+                        : Colors.black.withOpacity(0.08),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),

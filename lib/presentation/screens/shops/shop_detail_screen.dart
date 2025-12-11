@@ -184,7 +184,7 @@ class _ShopDetailScreenState extends State<ShopDetailScreen> {
                 itemBuilder: (context, index) {
                   final category = _categories[index];
                   final isSelected = category == _selectedCategory;
-                  return GestureDetector(
+                  return InkWell(
                     onTap: () {
                       setState(() => _selectedCategory = category);
                     },
