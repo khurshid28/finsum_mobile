@@ -176,6 +176,7 @@ class _ShopDetailScreenState extends State<ShopDetailScreen> {
           Container(
             height: 50.h,
             color: Colors.white,
+            padding: EdgeInsets.only(bottom: 16.h),
             child: FadeInLeft(
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -220,7 +221,7 @@ class _ShopDetailScreenState extends State<ShopDetailScreen> {
             ),
           ),
 
-          SizedBox(height: 8.h),
+          SizedBox(height: 16.h),
 
           // Products Count
           Padding(
