@@ -81,6 +81,18 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
           ],
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: SvgPicture.asset(
+            'assets/icons/svg/chevron-right.svg',
+            width: 24.w,
+            height: 24.h,
+            colorFilter: ColorFilter.mode(
+              AppColors.textPrimary,
+              BlendMode.srcIn,
+            ),
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: ListView.builder(
         padding: EdgeInsets.all(16.w),
@@ -141,7 +153,9 @@ class _PurchasesScreenState extends State<PurchasesScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       SvgPicture.asset(
-                        isCompleted ? 'assets/icons/svg/check.svg' : 'assets/icons/svg/clock.svg',
+                        isCompleted
+                            ? 'assets/icons/svg/check.svg'
+                            : 'assets/icons/svg/clock.svg',
                         width: 14.w,
                         height: 14.h,
                         colorFilter: ColorFilter.mode(

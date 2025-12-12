@@ -114,7 +114,7 @@ class _SavedScreenState extends State<SavedScreen> {
       ),
       child: Container(
         margin: EdgeInsets.only(bottom: 16.h),
-        padding: EdgeInsets.all(12.w),
+        padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16.r),
@@ -130,14 +130,24 @@ class _SavedScreenState extends State<SavedScreen> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12.r),
-              child: Image.asset(
-                item['image'],
-                width: 80.w,
-                height: 80.h,
-                fit: BoxFit.cover,
+              child: Container(
+                width: 90.w,
+                height: 90.h,
+                color: AppColors.background,
+                child: Image.asset(
+                  item['image'],
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(
+                      Icons.image,
+                      size: 40.sp,
+                      color: AppColors.textSecondary.withOpacity(0.3),
+                    );
+                  },
+                ),
               ),
             ),
-            SizedBox(width: 12.w),
+            SizedBox(width: 16.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,35 +156,61 @@ class _SavedScreenState extends State<SavedScreen> {
                     item['name'],
                     style: TextStyle(
                       fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    item['shop'],
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 6.h),
                   Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(4.w),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(6.r),
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/icons/svg/shop-new.svg',
+                          width: 14.w,
+                          height: 14.h,
+                          colorFilter: ColorFilter.mode(
+                            AppColors.primary,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 6.w),
+                      Text(
+                        item['shop'],
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          color: AppColors.textSecondary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10.h),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         '${_formatPrice(item['price'])} so\'m',
                         style: TextStyle(
-                          fontSize: 16.sp,
+                          fontSize: 17.sp,
                           fontWeight: FontWeight.w700,
                           color: AppColors.primary,
                         ),
                       ),
-                      SizedBox(width: 8.w),
+                      SizedBox(height: 2.h),
                       Text(
-                        '/ ${_formatPrice(item['monthlyPrice'])} so\'m/oy',
+                        'Oyiga: ${_formatPrice(item['monthlyPrice'])} so\'m',
                         style: TextStyle(
                           fontSize: 12.sp,
-                          color: AppColors.textSecondary,
+                          color: AppColors.success,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
@@ -182,13 +218,34 @@ class _SavedScreenState extends State<SavedScreen> {
                 ],
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.bookmark, color: AppColors.primary),
-              onPressed: () {
-                setState(() {
-                  _savedItems.removeAt(index);
-                });
-              },
+            SizedBox(width: 8.w),
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: Icon(
+                  Icons.bookmark,
+                  color: AppColors.primary,
+                  size: 24.sp,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _savedItems.removeAt(index);
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Saqlanganlardan o\'chirildi'),
+                      backgroundColor: AppColors.error,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),

@@ -51,13 +51,13 @@ class _MainScreenState extends State<MainScreen> {
           unselectedFontSize: 12.sp,
           items: [
             BottomNavigationBarItem(
-              icon: _buildNavIcon('assets/icons/svg/home.svg', false),
-              activeIcon: _buildNavIcon('assets/icons/svg/home.svg', true),
+              icon: _buildLogoIcon(false),
+              activeIcon: _buildLogoIcon(true),
               label: 'Asosiy',
             ),
             BottomNavigationBarItem(
-              icon: _buildNavIcon('assets/icons/svg/shop.svg', false),
-              activeIcon: _buildNavIcon('assets/icons/svg/shop.svg', true),
+              icon: _buildNavIcon('assets/icons/svg/shop-new.svg', false),
+              activeIcon: _buildNavIcon('assets/icons/svg/shop-new.svg', true),
               label: 'Do\'konlar',
             ),
             BottomNavigationBarItem(
@@ -77,6 +77,19 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildLogoIcon(bool isActive) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      child: Image.asset(
+        'assets/images/logo.png',
+        width: isActive ? 28.w : 26.w,
+        height: isActive ? 28.h : 26.h,
+        fit: BoxFit.contain,
       ),
     );
   }

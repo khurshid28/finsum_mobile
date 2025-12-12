@@ -25,6 +25,7 @@ class _HistoryScreenState extends State<HistoryScreen>
       'amount': 750000,
       'date': DateTime(2024, 12, 10),
       'status': 'success',
+      'provider': 'Payme',
     },
     {
       'id': '2',
@@ -34,6 +35,7 @@ class _HistoryScreenState extends State<HistoryScreen>
       'amount': 500000,
       'date': DateTime(2024, 12, 5),
       'status': 'success',
+      'provider': 'Finsum',
     },
     {
       'id': '3',
@@ -43,6 +45,7 @@ class _HistoryScreenState extends State<HistoryScreen>
       'amount': 750000,
       'date': DateTime(2024, 11, 10),
       'status': 'success',
+      'provider': 'Plum',
     },
     {
       'id': '4',
@@ -52,6 +55,7 @@ class _HistoryScreenState extends State<HistoryScreen>
       'amount': 500000,
       'date': DateTime(2024, 11, 5),
       'status': 'pending',
+      'provider': 'Mib',
     },
   ];
 
@@ -123,19 +127,57 @@ class _HistoryScreenState extends State<HistoryScreen>
           ],
         ),
         centerTitle: true,
-        bottom: TabBar(
-          controller: _tabController,
-          labelColor: AppColors.primary,
-          unselectedLabelColor: AppColors.textSecondary,
-          indicatorColor: AppColors.primary,
-          labelStyle: TextStyle(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
+        leading: IconButton(
+          icon: SvgPicture.asset(
+            'assets/icons/svg/chevron-right.svg',
+            width: 24.w,
+            height: 24.h,
+            colorFilter: ColorFilter.mode(
+              AppColors.textPrimary,
+              BlendMode.srcIn,
+            ),
           ),
-          tabs: const [
-            Tab(text: 'To\'lovlar'),
-            Tab(text: 'Xaridlar'),
-          ],
+          onPressed: () => Navigator.pop(context),
+        ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(50.h),
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+            decoration: BoxDecoration(
+              color: AppColors.background,
+              borderRadius: BorderRadius.circular(12.r),
+            ),
+            child: TabBar(
+              controller: _tabController,
+              labelColor: Colors.white,
+              unselectedLabelColor: AppColors.textSecondary,
+              indicator: BoxDecoration(
+                gradient: AppColors.primaryGradient,
+                borderRadius: BorderRadius.circular(12.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              indicatorSize: TabBarIndicatorSize.tab,
+              dividerColor: Colors.transparent,
+              labelStyle: TextStyle(
+                fontSize: 15.sp,
+                fontWeight: FontWeight.w700,
+              ),
+              unselectedLabelStyle: TextStyle(
+                fontSize: 15.sp,
+                fontWeight: FontWeight.w500,
+              ),
+              tabs: [
+                Tab(text: 'To\'lovlar'),
+                Tab(text: 'Xaridlar'),
+              ],
+            ),
+          ),
         ),
       ),
       body: TabBarView(
@@ -203,7 +245,9 @@ class _HistoryScreenState extends State<HistoryScreen>
               shape: BoxShape.circle,
             ),
             child: SvgPicture.asset(
-              isSuccess ? 'assets/icons/svg/check.svg' : 'assets/icons/svg/clock.svg',
+              isSuccess
+                  ? 'assets/icons/svg/check.svg'
+                  : 'assets/icons/svg/clock.svg',
               width: 24.w,
               height: 24.h,
               colorFilter: ColorFilter.mode(
@@ -226,6 +270,25 @@ class _HistoryScreenState extends State<HistoryScreen>
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 4.h),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.account_balance_wallet,
+                      size: 14.sp,
+                      color: AppColors.primary,
+                    ),
+                    SizedBox(width: 4.w),
+                    Text(
+                      payment['provider'],
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 4.h),
                 Row(
@@ -415,28 +478,31 @@ class _HistoryScreenState extends State<HistoryScreen>
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              GestureDetector(
+                onTap: () {
+                  // Navigate to purchase details
+                },
+                child: Container(
+                  width: 32.w,
+                  height: 32.h,
+                  decoration: BoxDecoration(
+                    color: AppColors.error.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.close,
+                    size: 18.sp,
+                    color: AppColors.error,
+                  ),
+                ),
+              ),
+              SizedBox(height: 8.h),
               Text(
                 _formatMoney(purchase['amount']),
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 15.sp,
                   fontWeight: FontWeight.w700,
                   color: AppColors.textPrimary,
-                ),
-              ),
-              SizedBox(height: 4.h),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(4.r),
-                ),
-                child: Text(
-                  '${purchase['installmentMonths']} oy',
-                  style: TextStyle(
-                    fontSize: 11.sp,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primary,
-                  ),
                 ),
               ),
             ],

@@ -29,7 +29,8 @@ class _ChatScreenState extends State<ChatScreen> {
       _messages.addAll([
         {
           'id': '1',
-          'text': 'Assalomu alaykum! Qo\'llab-quvvatlash xizmatiga xush kelibsiz!',
+          'text':
+              'Assalomu alaykum! Qo\'llab-quvvatlash xizmatiga xush kelibsiz!',
           'isMine': false,
           'time': DateTime.now().subtract(const Duration(seconds: 5)),
         },
@@ -60,7 +61,7 @@ class _ChatScreenState extends State<ChatScreen> {
     if (_messageController.text.trim().isEmpty) return;
 
     final messageText = _messageController.text.trim();
-    
+
     setState(() {
       _messages.add({
         'id': DateTime.now().millisecondsSinceEpoch.toString(),
@@ -314,31 +315,28 @@ class _ChatScreenState extends State<ChatScreen> {
                 GestureDetector(
                   onTap: _sendMessage,
                   child: Container(
-                    width: 50.w,
-                    height: 50.h,
+                    width: 52.w,
+                    height: 52.h,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          AppColors.primary,
-                          AppColors.primary.withOpacity(0.8),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
+                      color: AppColors.primary,
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primary.withOpacity(0.4),
+                          color: AppColors.primary.withOpacity(0.3),
                           blurRadius: 12,
                           offset: const Offset(0, 4),
                         ),
                       ],
                     ),
                     child: Center(
-                      child: Icon(
-                        Icons.send_rounded,
-                        color: Colors.white,
-                        size: 22.sp,
+                      child: SvgPicture.asset(
+                        'assets/icons/svg/send.svg',
+                        width: 22.w,
+                        height: 22.h,
+                        colorFilter: const ColorFilter.mode(
+                          Colors.white,
+                          BlendMode.srcIn,
+                        ),
                       ),
                     ),
                   ),

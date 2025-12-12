@@ -26,7 +26,7 @@ class CustomButton extends StatelessWidget {
       return OutlinedButton(
         onPressed: isLoading ? null : onPressed,
         style: OutlinedButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 16.h),
+          padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.r),
           ),
@@ -37,10 +37,10 @@ class CustomButton extends StatelessWidget {
         ),
         child: isLoading
             ? SizedBox(
-                height: 20.h,
-                width: 20.w,
+                height: 24.r,
+                width: 24.r,
                 child: CircularProgressIndicator(
-                  strokeWidth: 2,
+                  strokeWidth: 2.5,
                   valueColor: AlwaysStoppedAnimation<Color>(
                     backgroundColor ?? AppColors.primary,
                   ),
@@ -61,7 +61,7 @@ class CustomButton extends StatelessWidget {
       onPressed: isLoading ? null : onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor ?? AppColors.primary,
-        padding: EdgeInsets.symmetric(vertical: 16.h),
+        padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.r),
         ),
@@ -69,10 +69,10 @@ class CustomButton extends StatelessWidget {
       ),
       child: isLoading
           ? SizedBox(
-              height: 20.h,
-              width: 20.w,
+              height: 24.r,
+              width: 24.r,
               child: const CircularProgressIndicator(
-                strokeWidth: 2,
+                strokeWidth: 2.5,
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),
             )

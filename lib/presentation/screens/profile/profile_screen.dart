@@ -11,8 +11,8 @@ import '../../blocs/user/user_bloc.dart';
 import '../../blocs/theme/theme_bloc.dart';
 import '../../blocs/locale/locale_bloc.dart';
 import 'purchases_screen.dart';
-import 'scoring_screen.dart';
 import 'history_screen.dart';
+import 'cards_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -106,29 +106,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 ),
                                 SizedBox(height: 4.h),
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 8.w,
-                                        vertical: 4.h,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color:
-                                            AppColors.success.withOpacity(0.1),
-                                        borderRadius:
-                                            BorderRadius.circular(6.r),
-                                      ),
-                                      child: Text(
-                                        user.status,
-                                        style: TextStyle(
-                                          fontSize: 12.sp,
-                                          color: AppColors.success,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8.w,
+                                    vertical: 4.h,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.success.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(6.r),
+                                  ),
+                                  child: Text(
+                                    'Tasdiqlangan',
+                                    style: TextStyle(
+                                      fontSize: 12.sp,
+                                      color: AppColors.success,
+                                      fontWeight: FontWeight.w600,
                                     ),
-                                  ],
+                                  ),
                                 ),
                                 SizedBox(height: 8.h),
                                 Text(
@@ -148,6 +142,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                     // Menu Items
                     _buildMenuItem(
+                      iconPath: 'assets/icons/svg/card.svg',
+                      title: 'Kartalarim',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const CardsScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    _buildMenuItem(
                       iconPath: 'assets/icons/svg/bag.svg',
                       title: 'Xaridlarim',
                       onTap: () {
@@ -155,18 +161,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (_) => const PurchasesScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    _buildMenuItem(
-                      iconPath: 'assets/icons/svg/star.svg',
-                      title: 'Skoring',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const ScoringScreen(),
                           ),
                         );
                       },

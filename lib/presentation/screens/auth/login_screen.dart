@@ -72,19 +72,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       builder: (context, state) {
                         return Container(
                           padding: EdgeInsets.symmetric(
-                              horizontal: 12.w, vertical: 6.h),
+                              horizontal: 8.w, vertical: 4.h),
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(20.r),
+                            borderRadius: BorderRadius.circular(30.r),
                             border: Border.all(
-                                color: AppColors.primary.withOpacity(0.3)),
+                                color: AppColors.primary.withOpacity(0.2),
+                                width: 1.5),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.primary.withOpacity(0.1),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               _buildLanguageButton('🇺🇿', 'UZ',
                                   state.locale.languageCode == 'uz'),
-                              SizedBox(width: 8.w),
+                              SizedBox(width: 6.w),
                               _buildLanguageButton('🇷🇺', 'RU',
                                   state.locale.languageCode == 'ru'),
                             ],
@@ -199,21 +207,22 @@ class _LoginScreenState extends State<LoginScreen> {
             .add(ChangeLocale(Locale(code.toLowerCase())));
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(15.r),
+          borderRadius: BorderRadius.circular(25.r),
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text(flag, style: TextStyle(fontSize: 16.sp)),
-            SizedBox(width: 4.w),
+            Text(flag, style: TextStyle(fontSize: 18.sp)),
+            SizedBox(width: 6.w),
             Text(
               code,
               style: TextStyle(
                 color: isSelected ? Colors.white : AppColors.textSecondary,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                fontSize: 14.sp,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                fontSize: 15.sp,
               ),
             ),
           ],

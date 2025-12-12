@@ -41,6 +41,18 @@ class _ScoringScreenState extends State<ScoringScreen> {
           ],
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: SvgPicture.asset(
+            'assets/icons/svg/chevron-right.svg',
+            width: 24.w,
+            height: 24.h,
+            colorFilter: ColorFilter.mode(
+              AppColors.textPrimary,
+              BlendMode.srcIn,
+            ),
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.w),
@@ -77,11 +89,11 @@ class _ScoringScreenState extends State<ScoringScreen> {
                       alignment: Alignment.center,
                       children: [
                         SizedBox(
-                          width: 200.w,
-                          height: 200.h,
+                          width: 200.r,
+                          height: 200.r,
                           child: CircularProgressIndicator(
                             value: _scorePercentage,
-                            strokeWidth: 12.w,
+                            strokeWidth: 12.r,
                             backgroundColor: Colors.white.withOpacity(0.2),
                             valueColor: const AlwaysStoppedAnimation<Color>(
                               Colors.white,

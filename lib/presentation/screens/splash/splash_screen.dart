@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (mounted) {
       final localDataSource = getIt<LocalDataSource>();
       final token = localDataSource.getToken();
-      
+
       if (token != null && token.isNotEmpty) {
         context.go(AppRouter.main);
       } else {
@@ -94,9 +94,13 @@ class _SplashScreenState extends State<SplashScreen> {
               SizedBox(height: 60.h),
               FadeIn(
                 delay: const Duration(milliseconds: 1500),
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                  strokeWidth: 3.w,
+                child: SizedBox(
+                  height: 40.h,
+                  width: 40.w,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 4.w,
+                  ),
                 ),
               ),
             ],

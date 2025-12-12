@@ -48,7 +48,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
         },
         {
           'id': '4',
-          'text': 'Albatta! Samsung Galaxy S24 bizda mavjud. Narxi 15,000,000 so\'m. 12 oyga bo\'lib to\'lash imkoniyati ham bor.',
+          'text':
+              'Albatta! Samsung Galaxy S24 bizda mavjud. Narxi 15,000,000 so\'m. 12 oyga bo\'lib to\'lash imkoniyati ham bor.',
           'isMine': false,
           'time': DateTime.now().subtract(const Duration(minutes: 24)),
         },
@@ -278,7 +279,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
 
   Widget _buildMessage(Map<String, dynamic> message) {
     final isMine = message['isMine'];
-    
+
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h),
       child: Row(

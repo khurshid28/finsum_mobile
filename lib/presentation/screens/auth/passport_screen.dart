@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -23,12 +23,12 @@ class PassportScreen extends StatefulWidget {
 class _PassportScreenState extends State<PassportScreen> {
   final _passportController = TextEditingController();
   final _dateController = TextEditingController();
-  
+
   final _passportMask = MaskTextInputFormatter(
     mask: 'AA #######',
     filter: {'A': RegExp(r'[A-Z]'), '#': RegExp(r'[0-9]')},
   );
-  
+
   final _dateMask = MaskTextInputFormatter(
     mask: '##.##.####',
     filter: {'#': RegExp(r'[0-9]')},
@@ -63,105 +63,105 @@ class _PassportScreenState extends State<PassportScreen> {
         centerTitle: true,
       ),
       body: BlocListener<AuthBloc, AuthState>(
-          listener: (context, state) async {
-            if (state is VerifyPassportSuccess) {
-              // Save default token
-              final localDataSource = getIt<LocalDataSource>();
-              await localDataSource.saveToken('default_auth_token_${DateTime.now().millisecondsSinceEpoch}');
-              
-              if (mounted) {
-                context.go(AppRouter.main);
-              }
-            } else if (state is VerifyPassportFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: AppColors.error,
-                ),
-              );
+        listener: (context, state) async {
+          if (state is VerifyPassportSuccess) {
+            // Save default token
+            final localDataSource = getIt<LocalDataSource>();
+            await localDataSource.saveToken(
+                'default_auth_token_${DateTime.now().millisecondsSinceEpoch}');
+
+            if (mounted) {
+              context.go(AppRouter.main);
             }
-          },
-          child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.all(24.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SizedBox(height: 20.h),
-                  FadeInDown(
-                    child: Container(
-                      height: 100.h,
-                      width: 100.w,
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: SvgPicture.asset(
-                          'assets/icons/svg/card.svg',
-                          width: 50.w,
-                          height: 50.h,
-                          colorFilter: ColorFilter.mode(
-                            AppColors.primary,
-                            BlendMode.srcIn,
-                          ),
+          } else if (state is VerifyPassportFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: AppColors.error,
+              ),
+            );
+          }
+        },
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.all(24.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(height: 20.h),
+                FadeInDown(
+                  child: Container(
+                    height: 100.h,
+                    width: 100.w,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: SvgPicture.asset(
+                        'assets/icons/svg/card.svg',
+                        width: 50.w,
+                        height: 50.h,
+                        colorFilter: ColorFilter.mode(
+                          AppColors.primary,
+                          BlendMode.srcIn,
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 32.h),
-                  FadeInDown(
-                    delay: const Duration(milliseconds: 100),
-                    child: Text(
-                      'Pasport ma\'lumotlari',
-                      style: TextStyle(
-                        fontSize: 28.sp,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
-                      ),
-                      textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 32.h),
+                FadeInDown(
+                  delay: const Duration(milliseconds: 100),
+                  child: Text(
+                    'Pasport ma\'lumotlari',
+                    style: TextStyle(
+                      fontSize: 28.sp,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
                     ),
+                    textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 48.h),
-                  FadeInUp(
-                    delay: const Duration(milliseconds: 200),
-                    child: CustomTextField(
-                      controller: _passportController,
-                      hintText: 'AB 1234567',
-                      prefixIconPath: 'assets/icons/svg/card.svg',
-                      keyboardType: TextInputType.text,
-                      inputFormatters: [_passportMask],
-                    ),
+                ),
+                SizedBox(height: 48.h),
+                FadeInUp(
+                  delay: const Duration(milliseconds: 200),
+                  child: CustomTextField(
+                    controller: _passportController,
+                    hintText: 'AB 1234567',
+                    prefixIconPath: 'assets/icons/svg/card.svg',
+                    keyboardType: TextInputType.text,
+                    inputFormatters: [_passportMask],
                   ),
-                  SizedBox(height: 16.h),
-                  FadeInUp(
-                    delay: const Duration(milliseconds: 300),
-                    child: CustomTextField(
-                      controller: _dateController,
-                      hintText: 'DD.MM.YYYY',
-                      prefixIconPath: 'assets/icons/svg/calendar.svg',
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [_dateMask],
-                    ),
+                ),
+                SizedBox(height: 16.h),
+                FadeInUp(
+                  delay: const Duration(milliseconds: 300),
+                  child: CustomTextField(
+                    controller: _dateController,
+                    hintText: 'DD.MM.YYYY',
+                    prefixIconPath: 'assets/icons/svg/calendar.svg',
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [_dateMask],
                   ),
-                  SizedBox(height: 32.h),
-                  FadeInUp(
-                    delay: const Duration(milliseconds: 500),
-                    child: BlocBuilder<AuthBloc, AuthState>(
-                      builder: (context, state) {
-                        return CustomButton(
-                          text: 'Tasdiqlash',
-                          onPressed: _handleVerify,
-                          isLoading: state is AuthLoading,
-                        );
-                      },
-                    ),
+                ),
+                SizedBox(height: 32.h),
+                FadeInUp(
+                  delay: const Duration(milliseconds: 500),
+                  child: BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, state) {
+                      return CustomButton(
+                        text: 'Tasdiqlash',
+                        onPressed: _handleVerify,
+                        isLoading: state is AuthLoading,
+                      );
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        
+        ),
       ),
     );
   }
